@@ -14,6 +14,7 @@ app.use(cors());
 
 app.get('/test', (req, res) => { res.status(200).send('Hello, I work and ready for lab!') });
 app.get('/hello', (req, res) => { res.status(200).send('Added a hello page, Yay!') });
+app.get('/beaver', (req, res) => { res.status(200).send('Added a hello page, Yay!') });
 app.get('/weather', handleGetWeather);
 app.get('/movies', handleGetMovies);
 
@@ -75,9 +76,9 @@ class Movie {
 }
 
 function handleGetWeather(req, res) {
-    const weatherURL = `https://api.weatherbit.io/v2.0/current?lat=${req.query.lat}&lon=${req.query.lon}&key=${process.env.WEATHER_API_KEY}&units=I`
+    // const weatherURL = `https://api.weatherbit.io/v2.0/current?lat=${req.query.lat}&lon=${req.query.lon}&key=${process.env.WEATHER_API_KEY}&units=I`
     const weatherURL_Forecast = `https://api.weatherbit.io/v2.0/forecast/daily?lat=${req.query.lat}&lon=${req.query.lon}&key=${process.env.WEATHER_API_KEY}&units=I`
-
+    console.log(req.query.lat, req.query.lon, process.env.WEATHER_API_KEY);
     //code from when using json////////////////////////////////
     // const city_name = req.query.city_name;
     // const cityMatch = weatherData.find(city => city.city_name.toLowerCase() === city_name.toLowerCase());
@@ -91,11 +92,12 @@ function handleGetWeather(req, res) {
     ///code from using api call////////////////////////////////
     axios.get(weatherURL_Forecast)
         .then(results => {
+            console.log(results);
             let weatherDescription = results.data.data.map(day => new Forecast(day));
             res.status(200).send(weatherDescription);
         })
         .catch(error => {
-            console.error(error.message);
+            console.error(error);
             res.status(500).send('sorry error server side');
         });
 }
